@@ -1,4 +1,4 @@
-### Setting Jenkins master-slave on Kubernetes cluster
+# Setting Jenkins master-slave on Kubernetes cluster
 
 The Setup uses custom **Jenkins image**  for master which is pulled while creation of deployments from docker repo
 
