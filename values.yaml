@@ -1,0 +1,32 @@
+Master:
+  Image: "smartbuddy/jenkins-master"
+  ImageTag: "1.0"
+  ImagePullPolicy: "Always"
+  InstallPlugins:
+    - kubernetes:1.12.6
+    - workflow-job:2.31
+    - workflow-aggregator:2.5
+    - credentials-binding:1.16
+    - git:3.9.3
+    - google-oauth-plugin:0.7
+    - google-source-plugin:0.3
+  Cpu: "500m"
+  Memory: "350Mi"
+  JavaOpts: "-Xms350m -Xmx350m"
+  ServiceType: NodePort
+Agent:
+  Enabled: true
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "206Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+Persistence:
+  Size: 250Mi
+NetworkPolicy:
+  ApiVersion: networking.k8s.io/v1
+rbac:
+  install: true
+  serviceAccountName: cd-jenkins
