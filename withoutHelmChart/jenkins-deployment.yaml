@@ -11,10 +11,10 @@ spec:
     spec:
       containers:
         - name: jenkin-master
-          image: smartbuddy/jenkins-master:1.0
+          image: smartbuddy/jenkins-master:1.2
           env:
             - name: JAVA_OPTS
-              value: -Djenkins.install.runSetupWizard=false
+              value: -Djenkins.install.runSetupWizard=false -Dorg.csanchez.jenkins.plugins.kubernetes.pipeline.PodTemplateStepExecution.defaultImage=nandu96/jenkins-slave:1.2
           ports:
             - name: http-port
               containerPort: 8080
