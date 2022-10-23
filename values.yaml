@@ -1,32 +1,13 @@
-Master:
-  Image: "smartbuddy/jenkins-master"
-  ImageTag: "1.0"
-  ImagePullPolicy: "Always"
-  InstallPlugins:
-    - kubernetes:1.12.6
-    - workflow-job:2.31
-    - workflow-aggregator:2.5
-    - credentials-binding:1.16
-    - git:3.9.3
-    - google-oauth-plugin:0.7
-    - google-source-plugin:0.3
-  Cpu: "500m"
-  Memory: "350Mi"
-  JavaOpts: "-Xms350m -Xmx350m"
-  ServiceType: NodePort
-Agent:
-  Enabled: true
-  resources:
-    requests:
-      cpu: "200m"
-      memory: "206Mi"
-    limits:
-      cpu: "1"
-      memory: "512Mi"
-Persistence:
-  Size: 250Mi
-NetworkPolicy:
-  ApiVersion: networking.k8s.io/v1
-rbac:
-  install: true
-  serviceAccountName: cd-jenkins
+# https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/values.yaml
+controller:
+  image: "jenkins/jenkins"
+  tag: "2.361.2-jdk11"
+  # tagLabel: jdk11
+  serviceType: LoadBalancer
+  loadBalancerSourceRanges:
+  - 103.214.138.52/32
+  installPlugins:
+    - kubernetes:3706.vdfb_d599579f3
+    - git:4.11.5
+    - configuration-as-code:1512.vb_79d418d5fc8
+    - workflow-aggregator:590.v6a_d052e5a_a_b_5

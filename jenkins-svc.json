@@ -1,0 +1,68 @@
+{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "cloud.google.com/neg": "{\"ingress\":true}",
+            "meta.helm.sh/release-name": "jenkins-v1",
+            "meta.helm.sh/release-namespace": "jenkins"
+        },
+        "creationTimestamp": "2022-10-23T19:20:19Z",
+        "finalizers": [
+            "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+            "app.kubernetes.io/component": "jenkins-controller",
+            "app.kubernetes.io/instance": "jenkins-v1",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/name": "jenkins",
+            "helm.sh/chart": "jenkins-4.2.9"
+        },
+        "name": "jenkins-v1",
+        "namespace": "jenkins",
+        "resourceVersion": "29994941",
+        "uid": "ac71152e-37e8-4933-bc82-52bef8e75b98"
+    },
+    "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "10.98.12.981",
+        "clusterIPs": [
+            "10.98.12.981"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+            "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "loadBalancerSourceRanges": [
+            "103.204.133.51/32"
+        ],
+        "ports": [
+            {
+                "name": "http",
+                "nodePort": 32306,
+                "port": 8080,
+                "protocol": "TCP",
+                "targetPort": 8080
+            }
+        ],
+        "selector": {
+            "app.kubernetes.io/component": "jenkins-controller",
+            "app.kubernetes.io/instance": "jenkins-v1"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+    },
+    "status": {
+        "loadBalancer": {
+            "ingress": [
+                {
+                    "ip": "34.872.1128.215"
+                }
+            ]
+        }
+    }
+}
+
+

@@ -1,60 +1,39 @@
-# Setting Jenkins master-slave on Kubernetes cluster
+# Setting Jenkins master-slave on GKE cluster using helm
 
-The Setup uses custom **Jenkins image**  for master which is pulled while creation of deployments from docker repo
 
-## Step1. Installation of helm and tiller
+
+## Step1. Installation of helm 
 
 ```
-wget https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
 
-tar zxfv helm-v2.9.1-linux-amd64.tar.gz
-
-cp linux-amd64/helm .
-
-mv helm /usr/bin/
-
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$USER
-
-kubectl create serviceaccount tiller --namespace kube-system 	
-kubectl create clusterrolebinding tiller-admin-binding --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-
-helm init --service-account=tiller
+## Step2. Installation of jenkins Using helm
+```bash
+helm repo add jenkins https://charts.jenkins.io
 helm repo update
-helm version
+#helm search repo jenkins
+helm install jenkins-v1 jenkins/jenkins --namespace=jenkins --create-namespace -f values.yaml --wait
 
-helm search jenkins
+# storing values for future reference
+helm get values jenkins-v1
 ```
 
-## Step2. Installation of **jenkins Using helm**
-Main ingredient of the setup is **values.yaml**
-```
-helm install -n jenkinscicd stable/jenkins -f values.yaml --version 0.16.5 --wait
-```
+## Step3. Getting jenkins-admin password from **secret**
+```bash
+printf $(kubectl get secret jenkins-v1 -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 
-## Step3. Configuring the ClusterIP svc to NodePort
-
-```
-kubectl get all
-kubectl get svc cd-jenkins -o yaml | tee cd-jenkins.yaml
- NodePort
-kubectl apply -f cd-jenkins.yaml
-
-kubectl get svc
-
-minikube service cd-jenkins
+k get svc jenkins-v1 -o jsonpath="{.status.loadBalancer.ingress[].ip}"
 ```
 
-## Step4. Getting jenkins-admin password from **secret**
 
-```
-printf $(kubectl get secret jenkinscicd -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
-```
-
-## Step5. Flushing all steps
+## Flushing all steps
 ```
 kubectl get events
 kubectl get all
 helm list
-helm del <chartname> --purge
+helm uninstall jenkins-v1
 helm get values jenkinscicd
 ```
